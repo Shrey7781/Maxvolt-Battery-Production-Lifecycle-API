@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, String, Numeric, ForeignKey
+from sqlalchemy.orm import relationship
 from app.database import Base
 
 
@@ -12,3 +13,6 @@ class GradingStepResult(Base):
     end_v = Column(Numeric(5, 3))
     end_cap = Column(Numeric(6, 2))
     time_min = Column(Numeric(6, 2))
+
+    # 👇 THIS WAS MISSING
+    cell = relationship("Cell", back_populates="grading_results")
