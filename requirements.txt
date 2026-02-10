@@ -1,0 +1,16 @@
+# Web Framework
+fastapi==0.109.0
+uvicorn[standard]==0.27.0
+python-multipart==0.0.6
+
+# Database & ORM
+sqlalchemy==2.0.25
+psycopg2-binary==2.9.9
+
+# Data Processing & Machine File Parsing
+pandas==2.2.0
+xlrd==2.0.1
+openpyxl==3.1.2
+
+# Utilities
+python-datetime
