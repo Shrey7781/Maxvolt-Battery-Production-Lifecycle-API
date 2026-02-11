@@ -35,3 +35,4 @@ async def auto_link_grading(file: UploadFile = File(...), db: Session = Depends(
     # Read the file as binary (bytes)
     content = await file.read()
     return CSVService.parse_machine_excel(db, content)
+

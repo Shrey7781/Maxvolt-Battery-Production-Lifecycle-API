@@ -17,7 +17,7 @@ class Cell(Base):
                   # Date from machine file
     
     # Sorting & Inventory Status
-    capacity_group = Column(String(10))       # e.g., "Group A", "Group B"
+    capacity_group = Column(String(50))       # e.g., "Group A", "Group B"
     is_used = Column(Boolean, default=False)  # TRUE once mapped to a pack
 
     # --- Relationships ---
