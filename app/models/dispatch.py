@@ -7,7 +7,7 @@ class BatteryDispatch(Base):
     __tablename__ = "battery_dispatch"
 
     sale_id = Column(Integer, primary_key=True, index=True)
-    battery_id = Column(Integer, ForeignKey("battery_packs.battery_id"), unique=True)
+    battery_id = Column(String(100), ForeignKey("battery_packs.battery_id"), unique=True)
     customer_name = Column(String(255), nullable=False)
     invoice_number = Column(String(100))
     sale_date = Column(DateTime, default=datetime.utcnow)

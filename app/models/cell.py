@@ -1,33 +1,24 @@
-from sqlalchemy import Column, String, Integer, Numeric, Boolean, DateTime
+from sqlalchemy import Column, String, Numeric, Boolean, DateTime
 from sqlalchemy.orm import relationship
-from app.database import Base
+from app.database import Base # Ensure this import is present!
+from datetime import datetime
 
 class Cell(Base):
     __tablename__ = "cells"
 
-    # Primary Identifier (Barcode Scan)
     cell_id = Column(String(100), primary_key=True, index=True)
+    grading_date = Column(DateTime, default=datetime.now)
     
-    # Grading Results (Extracted from CSV)
-    grading_cycle = Column(Numeric(3, 1)) # Stores 0.3, 0.5, etc.
-    grading_date = Column(DateTime)
-    actual_cap_ah = Column(Numeric(6, 2))     # The capacity from CC-D step
-    ocv_volts = Column(Numeric(5, 3))         # Open Circuit Voltage
-    acir_mohm = Column(Numeric(6, 2))         # Internal Resistance
-                  # Date from machine file
-    
-    # Sorting & Inventory Status
-    capacity_group = Column(String(50))       # e.g., "Group A", "Group B"
-    is_used = Column(Boolean, default=False)  # TRUE once mapped to a pack
+    # Use (10, 3) for high precision (e.g., 102.328 Ah)
+    actual_cap_ah = Column(Numeric(10, 3))     
+    ocv_volts = Column(Numeric(10, 3))         
+    cut_off_voltage = Column(Numeric(10, 3))   
+                  
+    capacity_group = Column(String(50))       
+    is_used = Column(Boolean, default=False)
 
-    # --- Relationships ---
     
-    # Allows you to call cell.grading_results to see all steps for this cell
-    grading_results = relationship("GradingStepResult", back_populates="cell", cascade="all, delete-orphan")
-    
-    # Links back to the pack cell mapping (via the bridge table in battery.py)
-    # This allows you to see which pack a cell belongs to
     battery_packs = relationship("BatteryPack", secondary="pack_cell_mapping", back_populates="cells")
-
+    grading_results = relationship("GradingStepResult", back_populates="cell", cascade="all, delete-orphan")
     def __repr__(self):
-        return f"<Cell(id={self.cell_id}, capacity={self.actual_cap_ah}, is_used={self.is_used})>"
+        return f"<Cell(id={self.cell_id}, capacity={self.actual_cap_ah})>"

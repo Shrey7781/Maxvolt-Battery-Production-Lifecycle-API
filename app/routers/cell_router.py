@@ -32,7 +32,6 @@ def get_cell_details(cell_id: str, db: Session = Depends(get_db)):
 
 @router.post("/auto-link-grading")
 async def auto_link_grading(file: UploadFile = File(...), db: Session = Depends(get_db)):
-    # Read the file as binary (bytes)
     content = await file.read()
-    return CSVService.parse_machine_excel(db, content)
+    return await CellService.process_grading_excel(db, content)
 
