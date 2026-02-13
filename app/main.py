@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware # Missing import
 from app.database import engine, Base
 
 # 1. IMPORT ALL MODELS FIRST (Must be before create_all)
@@ -15,7 +16,18 @@ Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Maxvolt Energy Production Portal")
 
-# 4. INCLUDE ROUTERS
+# 4. ADD CORS MIDDLEWARE (MUST be before including routers)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # For production, change this to your frontend URL
+    allow_credentials=True,
+    allow_methods=["*"],  # This enables OPTIONS, POST, GET, etc.
+    allow_headers=["*"],
+)
+
+# 5. INCLUDE ROUTERS
+# Note: Ensure the 'prefix' in your routers matches what the frontend calls.
+# If cell_router has prefix="/cells", then calling /cells will work.
 app.include_router(cell_router.router)
 app.include_router(template_router.router)
 app.include_router(battery_router.router)
